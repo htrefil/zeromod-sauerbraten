@@ -415,7 +415,7 @@ void z_servcmd_ipban(int argc, char **argv, int sender)
             return;
         }
     }
-    else time = 4*60*60000;
+    else time = INT_MAX;
 
     const char *reason = argc > 3 ? argv[3] : NULL;
 
