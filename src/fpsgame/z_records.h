@@ -112,7 +112,7 @@ static void z_newrecord(clientinfo *ci, int time)
                 return;
             }
 
-            addban(im.ip, time, BAN_KICK, "cheating");
+            addban(im.ip, INT_MAX, BAN_KICK, "cheating");
 
             logoutf("banned IP %s for having a record of %f secs", ip, (float)time / 1000.0);    
         }
