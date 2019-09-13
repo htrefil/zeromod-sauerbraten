@@ -101,7 +101,25 @@ static void z_newrecord(clientinfo *ci, int time)
     // check if we should register this
     if(ci->state.aitype != AI_NONE) return; // bot
     if(!ci->name[0] || (!record_unnamed && !strcmp(ci->name, "unnamed"))) return;
-    if(time <= record_min) return;
+    if(time <= record_min) {
+        const char* ip = getclienthostname(ci->clientnum);
+        
+        if (ip != NULL) {
+            ipmask im;
+            im.parse(ip);
+            if(im.mask == 0xFFffFFff) {
+                logoutf("failed to parse IP %s", ip);
+                return;
+            }
+
+            addban(im.ip, time, BAN_KICK, "cheating");
+
+            logoutf("banned IP %s for having a record of %f secs", ip, (float)time / 1000.0);    
+        }
+        
+        return;
+    }
+
     if(record_max && time >= record_max) return;
     // find existing record
     z_findcurrentrecord();
